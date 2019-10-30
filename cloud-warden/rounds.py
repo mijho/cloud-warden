@@ -110,7 +110,7 @@ def define_actions(manifest, regions, schedule, action) -> list:
                 else:
                     instance_dict = {'Region': region, 'Action': 'none'}
                     instance.update(instance_dict)
-                    print(f'{instance} does not have a valid shutdown policy please rectify before next run')
+                    logger.warning(f'{instance} does not have a valid shutdown policy please rectify before next run')
                     instance_manifest.append(instance)
 
     return instance_manifest
@@ -178,6 +178,8 @@ def console_handler(schedule, action, regions, dryrun):
             instance_name = instance['Name']
             logger.info(f'Powering off {instance_name}')
             power_instance_off(instance['InstanceId'], instance['Region'], dryrun)
+
+    print(json.dumps(action_manifest))
 
 
 def lambda_handler(event, context):
