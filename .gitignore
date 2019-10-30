@@ -1,0 +1,6 @@
+.venv*
+.vscode*
+sawmill*
+*.DS_Store*
+*__pycache*
+.env

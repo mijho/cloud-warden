@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "cloud-warden"
+version = "0.1.0"
+description = "Does the sweeps on AWS compute resources switching unnecessary things off"
+authors = ["Mark Johnson <mark.johnson@mirrorweb.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+boto3 = "^1.10"
+sawmill = {git = "https://github.com/mirrorweb/sawmill.git"}
+[tool.poetry.dev-dependencies]
+flake8 = "^3.7"
+autopep8 = "^1.4"
+isort = "^4.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
