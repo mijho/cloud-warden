@@ -3,7 +3,7 @@ version		:= 0.0.1
 author		:= Mark Johnson
 function 	:= To facilitate making lambda packages
 
-.PHONY: env run help docker_image clean deploy repackage
+.PHONY: env run help lint requirements
 .DEFAULT: help
 
 # List and check for commands.
@@ -18,9 +18,6 @@ BLUE   := $(shell tput -Txterm setaf 4)
 RESET  := $(shell tput -Txterm sgr0)
 
 TARGET_MAX_CHAR_NUM=60
-TAG ?= latest
-
-AWS_PROFILE := mw-core-dev
 
 help:
 	@echo ''
@@ -55,15 +52,8 @@ lint:
 	@poetry run flake8
 
 run:
-	@SAWMILL_DEVELOPER_LOGS=true aws-vault exec mw-tna-dmz-staging -- poetry run python aws-asg-scaler/scale.py
+	@SAWMILL_DEVELOPER_LOGS=true aws-vault exec ${ACCOUNT} -- poetry run python cloud-warden/rounds.py
 
 requirements:
 	@poetry show --no-dev | tr -s " " | sed 's/ /==/' | sed 's/ .*//' > requirements.txt
 	@gsed -i 's/sawmill.*/git+https:\/\/github.com\/mirrorweb\/sawmill@master/g' requirements.txt
-
-
-# package:
-# 	@docker build -t aws_asg_scaler:${TAG} -f aws_asg_scaler.Dockerfile .
-# 	@docker login docker.pkg.github.com --username mwrobot
-# 	@docker tag aws_asg_scaler docker.pkg.github.com/mirrorweb/aws-asg-scaler/aws_asg_scaler:${TAG}
-# 	@docker push docker.pkg.github.com/mirrorweb/aws-asg-scaler/aws_asg_scaler:${TAG}
